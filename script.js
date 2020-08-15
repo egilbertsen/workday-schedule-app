@@ -7,23 +7,26 @@ $(document).ready(function(){
         var currentDateStr = moment().format('dddd, MMMM Do YYYY');
         $('#currentDay').text(currentDateStr);
     }
-    
+
+    var minTime = 6;
+    var maxTime = 18;
+
     generateTimeBlocks();
     
     function generateTimeBlocks() {
         var timeContainer = $(".container");
 
-        for (var i = 6; i < 18; i++) {
+        for (var indexTime = minTime ; indexTime < maxTime; indexTime++) {
             var newTimeRow = $("<div>");
             newTimeRow.addClass("row time-block");
-            newTimeRow.attr("data-hour", i);
+            newTimeRow.attr("data-hour", indexTime);
 
             var newTimeDiv = $("<div>");
             newTimeDiv.addClass("col-md-1 hour");
-            if (i>12) {
-                newTimeDiv.text((i - 12) + ":00");
+            if (indexTime>12) {
+                newTimeDiv.text((indexTime - 12) + ":00");
             } else {
-                newTimeDiv.text(i + ":00")
+                newTimeDiv.text(indexTime+ ":00")
             }
 
             var newTextArea = $("<textarea>");
@@ -57,42 +60,37 @@ $(document).ready(function(){
         }
     })
 
-    var calendarEvents = ["", "", "", 
-                        "", "", "", 
-                        "", "", "", 
-                        "", "", ""];
+    // adding to local storage
+    var calendarEventsArr = []
 
+    var textAreaArr = $("textarea");
+
+    textAreaArr.each(function(){
+        calendarEventsArr.push("");
+    })
    
     initCalendarEvents();
 
     $(".saveBtn").click(function(){
         event.preventDefault();
 
-        var timeBlockRow = $(this).parent()
-
-        
+        var timeBlockRow = $(this).parent();
         var timeBlockHour = timeBlockRow.data("hour");
         var timeBlockIndex = timeBlockHour - 6;
         var parsedTimeBlockIndex = parseInt(timeBlockIndex);
-
-        var timeBlockText = timeBlockRow.children("textarea").val()
+        var timeBlockText = timeBlockRow.children("textarea").val();
         
-        calendarEvents.splice(parsedTimeBlockIndex, 1, timeBlockText);
+        calendarEventsArr.splice(parsedTimeBlockIndex, 1, timeBlockText);
         
         renderCalendarEvents();
         storeCalEvents();
     });
-    
-    
-
+        
     function renderCalendarEvents(){
-       
         $("textarea").text("");
 
-        var textAreaArr = $("textarea");
-
         textAreaArr.each(function(index){
-            $(this).text(calendarEvents[index]);
+            $(this).text(calendarEventsArr[index]);
         })
     };
 
@@ -100,13 +98,13 @@ $(document).ready(function(){
         var storedCalEvents = JSON.parse(localStorage.getItem("calEvents"));
 
         if (storedCalEvents !== null) {
-            calendarEvents = storedCalEvents;
+            calendarEventsArr = storedCalEvents;
         }
         renderCalendarEvents();
     }
 
     function storeCalEvents() {
-        localStorage.setItem("calEvents", JSON.stringify(calendarEvents));
+        localStorage.setItem("calEvents", JSON.stringify(calendarEventsArr));
     }
 
 });
