@@ -10,3 +10,5 @@ This app is a basic daily calendar, allowing the user to create and save events 
 
 Moment.js is used to set the date at the top of the calendar. It was also used to create color variation helping to designate the past, present, and future portions of the workday.
 
+The user can store events in their local storage by pressing the "save" button.
+

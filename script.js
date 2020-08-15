@@ -36,6 +36,7 @@ $(document).ready(function(){
             newTimeRow.append(newTimeDiv, newTextArea, newSaveButton);
             timeContainer.append(newTimeRow);
         }
+        
     }
 
     var rowArr = $(".time-block");
@@ -46,7 +47,6 @@ $(document).ready(function(){
     rowArr.each(function() {
         
         var thisHour = parseInt($(this).data("hour"));
-        console.log(thisHour);
 
         if (thisHour == currentHourParsed) {
             $(this).addClass("present")
@@ -56,5 +56,57 @@ $(document).ready(function(){
             $(this).addClass("future")
         }
     })
+
+    var calendarEvents = ["", "", "", 
+                        "", "", "", 
+                        "", "", "", 
+                        "", "", ""];
+
+   
+    initCalendarEvents();
+
+    $(".saveBtn").click(function(){
+        event.preventDefault();
+
+        var timeBlockRow = $(this).parent()
+
+        
+        var timeBlockHour = timeBlockRow.data("hour");
+        var timeBlockIndex = timeBlockHour - 6;
+        var parsedTimeBlockIndex = parseInt(timeBlockIndex);
+
+        var timeBlockText = timeBlockRow.children("textarea").val()
+        
+        calendarEvents.splice(parsedTimeBlockIndex, 1, timeBlockText);
+        
+        renderCalendarEvents();
+        storeCalEvents();
+    });
     
+    
+
+    function renderCalendarEvents(){
+       
+        $("textarea").text("");
+
+        var textAreaArr = $("textarea");
+
+        textAreaArr.each(function(index){
+            $(this).text(calendarEvents[index]);
+        })
+    };
+
+    function initCalendarEvents() {
+        var storedCalEvents = JSON.parse(localStorage.getItem("calEvents"));
+
+        if (storedCalEvents !== null) {
+            calendarEvents = storedCalEvents;
+        }
+        renderCalendarEvents();
+    }
+
+    function storeCalEvents() {
+        localStorage.setItem("calEvents", JSON.stringify(calendarEvents));
+    }
+
 });
