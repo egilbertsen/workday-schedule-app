@@ -12,3 +12,12 @@ Moment.js is used to set the date at the top of the calendar. It was also used t
 
 The user can store events in their local storage by pressing the "save" button.
 
+## Deployed App
+
+ https://egilbertsen.github.io/workday-schedule-app/
+ 
+ ![screenshot of deployed app](imageDepApp.png)
+ 
+ 
+ 
+
